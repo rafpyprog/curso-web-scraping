@@ -1,0 +1,13 @@
+beautifulsoup4
+ipython
+jupyter
+lxml
+matplotlib
+pandas
+pdfminer3k
+Pillow
+PyPDF2
+pytesseract
+requests
+selenium
+xlrd
