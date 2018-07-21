@@ -13,3 +13,8 @@ soup = BeautifulSoup(html, 'html.parser')
 classe_logo = 'logo-mobile scale-with-grid'
 logo_inferir = soup.find('img', {'class': classe_logo})
 print(logo_inferir)
+
+url = logo_inferir['src']
+
+with open('logoinferir.png', 'wb') as f:
+    f.write(requests.get(url).content)

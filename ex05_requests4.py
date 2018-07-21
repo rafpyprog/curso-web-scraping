@@ -1,29 +1,5 @@
+from inferir import download_url
 import requests
-
-
-def download_url(url, nome_arquivo):
-    ''' Acessa a url utilizando o método HTTP GET, verifica o tipo de conteúdo e armazena no arquivo passado como parâmetro '''
-
-    response = requests.get(url)
-    response.raise_for_status()
-
-    content_type = response.headers.get('Content-Type', '')
-
-    if content_type.startswith('text'):
-        mode = 'w'  # escrita de arquivo texto
-        dados = response.text
-    else:
-        mode = 'wb'  # escrita de arquivo binário
-        dados = response.content
-
-    with open(nome_arquivo, mode) as f:
-        f.write(dados)
-
-    msg = ('Download do conteúdo {} da url {} armazenado '
-           'com sucesso no arquivo {}.')
-    print(msg.format(content_type, url, nome_arquivo))
-
-    return response
 
 
 if __name__ == '__main__':
@@ -40,14 +16,27 @@ if __name__ == '__main__':
         * Número de cotistas
     '''
 
+
+    import os
+
+    from datetime import date
+
+    hoje = date.today()
+    ano_dia = hoje.year
+    mes_dia = hoje.month
+
     url = 'http://dados.cvm.gov.br/dados/FI/DOC/INF_DIARIO/DADOS/inf_diario_fi_{ano}{mes}.csv'
     for ano in (2017, 2018):
         for mes in range(1, 12 + 1):
             url_csv = url.format(ano=ano, mes=str(mes).zfill(2))
             print(url_csv)
-            # utilizamos o nome do arquivo csv da url
-            arquivo_saida = url_csv.split('/')[-1]
-            download_url(url_csv, arquivo_saida)
-            # encerra o loop no último informativo disponível
-            if ano == 2018 and mes == 7:
+            ultimo = sorted(os.listdir())[-1]
+            print('ulyimo', ultimo)
+            print(url_csv.split('/')[-1][14:-4])
+            if url_csv.split('/')[-1][:-4] > ultimo[13:-4]:
+                # utilizamos o nome do arquivo csv da url
+                arquivo_saida = url_csv.split('/')[-1]
+                download_url(url_csv, arquivo_saida)
+                # encerra o loop no último informativo disponível
+            if ano == ano_dia and mes == mes_dia:
                 break
